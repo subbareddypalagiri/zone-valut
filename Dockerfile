@@ -8,21 +8,18 @@ COPY . .
 
 RUN chown -R www-data:www-data /var/www/html
 
----
 
 FROM nginx:alpine
 
 WORKDIR /var/www/html
 
-# Copy PHP config from php-fpm image
+# Copy PHP files from php-fpm stage
 COPY --from=php /var/www/html /var/www/html
-COPY --from=php /usr/local/etc/php /usr/local/etc/php
-COPY --from=php /usr/local/etc/php-fpm.d /usr/local/etc/php-fpm.d
 
 # Create nginx config for SPA + API routing
 RUN cat > /etc/nginx/conf.d/default.conf <<'EOF'
 upstream php {
-    server localhost:9000;
+    server 127.0.0.1:9000;
 }
 
 server {
@@ -62,8 +59,16 @@ server {
 }
 EOF
 
-# Start both nginx and php-fpm
-RUN echo '#!/bin/sh\nphp-fpm -D\nnginx -g "daemon off;"' > /usr/local/bin/start.sh && \
-    chmod +x /usr/local/bin/start.sh
+# Copy PHP-FPM from first stage to run both services
+COPY --from=php /usr/local/sbin/php-fpm /usr/local/sbin/
+COPY --from=php /usr/local/etc/php-fpm.conf /usr/local/etc/
+COPY --from=php /usr/local/etc/php-fpm.d /usr/local/etc/php-fpm.d/
+COPY --from=php /usr/local/lib/php /usr/local/lib/php
 
-CMD ["/usr/local/bin/start.sh"]
+# Create startup script
+RUN echo '#!/bin/sh' > /start.sh && \
+    echo 'php-fpm &' >> /start.sh && \
+    echo 'nginx -g "daemon off;"' >> /start.sh && \
+    chmod +x /start.sh
+
+CMD ["/start.sh"]
