@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZoneVault - Multi-Zone Safety & Services Directory</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""
+    />
+    <link rel="manifest" href="manifest.json">
+    
+   
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#" class="nav-logo" onclick="showPage('home')">🌐 ZoneVault</a>
+            <ul class="nav-links">
+				<li><a href="#" class="nav-link active" onclick="showPage('home')">Home</a></li>
+                <li><a href="#" class="nav-link" onclick="showPage('zones')">Zones</a></li>
+                <li><a href="#" class="nav-link" onclick="showPage('emergency')">Emergency</a></li>
+                <li><a href="#" class="nav-link" onclick="showPage('services')">Services</a></li>
+                <li><a href="#" class="nav-link" onclick="showPage('guidance')">Guidance</a></li>
+                <li><a href="#" class="nav-link" onclick="showPage('alerts')">Alerts</a></li>
+                <li><a href="#" class="nav-link" onclick="showPage('map')">Map</a></li>
+                <li><a href="#" class="nav-link" onclick="showPage('about')">About</a></li>
+				<li><a href="#" class="nav-link" onclick="showPage('contact')">Contact</a></li>
+				<li><a href="#" class="nav-link" onclick="showPage('login')">Login</a></li>
+				<li><a href="#" class="nav-link" onclick="showPage('signup')">Sign Up</a></li>
+                <li><a href="#" id="adminLink" class="nav-link" onclick="showPage('admin')">Admin</a></li>
+                <li><a href="#" id="logoutLink" class="nav-link" onclick="logout()" style="display:none;">Logout</a></li>
+            </ul>
+            <div style="display:flex; gap:0.5rem; align-items:center;">
+                <label for="zoneSelector" style="color:#fff; font-size:0.9rem;">Zone:</label>
+                <select id="zoneSelector" class="filter-select" aria-label="Select zone" style="min-width:200px;">
+                    <option value="">All Zones</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <button class="dark-mode-toggle" type="button" onclick="toggleDarkMode()" aria-label="Toggle dark mode">🌙</button>
+
+    <div id="zoneContextBar" class="online-indicator" aria-live="polite" style="display:none;">
+        Selected zone: <strong id="selectedZoneName">-</strong>
+    </div>
+    
+    <div id="offlineIndicator" class="offline-indicator" style="display:none;">
+        <i class="fas fa-wifi"></i> You are offline. Some features may be limited.
+    </div>
+
+    <!-- Home Page -->
+    <div id="home-page" class="page">
+        <div class="welcome-section">
+            <div class="container">
+                <h1 class="welcome-title">Welcome to ZoneVault</h1>
+                <p class="welcome-subtitle">
+                    Your comprehensive zone-specific safety and service directory. 
+                    Find emergency contacts, local services, and essential guidance for your area.
+                </p>
+            </div>
+        </div>
+        <div class="container">
+			<div class="zone-grid" id="home-zone-grid">
+				<!-- Zones will be dynamically loaded here -->
+			</div>
+        </div>
+    </div>
+
+    <!-- Map Page -->
+    <div id="map-page" class="page">
+        <div class="container">
+            <header>
+                <h1 class="logo">🗺️ Zone Map</h1>
+                <p class="subtitle">Locations of all zones on the map</p>
+            </header>
+        </div>
+        <div class="container" style="margin-top:1rem;">
+            <section class="section">
+                <h2 class="section-title"><i class="fas fa-map"></i> Explore Zones</h2>
+                <div style="display:flex; gap:0.75rem; align-items:center; margin-bottom:0.75rem; flex-wrap:wrap;">
+                    <label style="display:flex; align-items:center; gap:0.4rem;">
+                        <input type="checkbox" id="toggleServicesOnMap"> Show services
+                    </label>
+                    <label style="display:flex; align-items:center; gap:0.4rem;">
+                        Category:
+                        <select id="mapServiceCategory" class="filter-select" style="min-width:180px;">
+                            <option value="">All</option>
+                            <option value="clinic">Clinic</option>
+                            <option value="pharmacy">Pharmacy</option>
+                            <option value="electrician">Electrician</option>
+                            <option value="grocery">Grocery</option>
+                            <option value="hotel">Hotel</option>
+                            <option value="food">Food</option>
+                            <option value="tailor">Tailor</option>
+                            <option value="shopping">Shopping</option>
+                            <option value="tourist">Tourist</option>
+                        </select>
+                    </label>
+                </div>
+                <div style="display:flex; gap:0.5rem; align-items:center; margin-bottom:0.75rem; flex-wrap:wrap;">
+                    <input id="mapSearchInput" type="text" placeholder="Search location or service..." style="flex:1; min-width:220px; padding:0.5rem 0.6rem; border:1px solid #e2e8f0; border-radius:8px;">
+                    <button id="mapSearchBtn" class="btn" type="button"><i class="fas fa-search"></i> Search</button>
+                </div>
+                <div id="mapSearchResults" class="list" style="margin-top:-0.5rem; margin-bottom:0.5rem;"></div>
+                <div style="display:flex; gap:0.75rem; align-items:center; margin-bottom:0.75rem; flex-wrap:wrap;">
+                    <label for="tileProvider" style="color:#4a5568;">Basemap:</label>
+                    <select id="tileProvider" class="filter-select" style="min-width:220px;">
+                        <option value="osm">OpenStreetMap</option>
+                        <option value="carto">Carto Voyager</option>
+                        <option value="carto_dark">Carto Dark Matter</option>
+                        <option value="esri">Esri World Street Map</option>
+                        <option value="esri_sat">Esri Satellite</option>
+                        <option value="stamen">Stamen Toner</option>
+                    </select>
+                    <button id="btnLocate" class="btn" type="button">
+                        <i class="fas fa-crosshairs"></i> Use My Location
+                    </button>
+                    <button id="btnReset" class="btn btn-secondary" type="button">
+                        <i class="fas fa-home"></i> Reset View
+                    </button>
+                </div>
+                <div id="map" style="height: 450px; border-radius: 12px; overflow: hidden;"></div>
+                <div id="nearbyZones" style="margin-top:0.75rem; color:#4a5568;"></div>
+                <div id="locationStatus" style="margin-top:0.5rem; font-size:0.9rem; color:#718096;"></div>
+                <p style="margin-top: 0.75rem; color:#4a5568;">
+                    Map powered by <a href="https://leafletjs.com/" target="_blank" rel="noopener">Leaflet</a>.
+                </p>
+            </section>
+        </div>
+    </div>
+
+    <!-- Zones Page -->
+    <div id="zones-page" class="page">
+        <div class="container">
+            <header>
+                <h1 class="logo">📍 All Zones</h1>
+                <p class="subtitle">Select your zone for specific information</p>
+            </header>
+			<div class="zone-grid" id="zones-zone-grid">
+				<!-- Zones will be dynamically loaded here -->
+			</div>
+        </div>
+    </div>
+
+    <!-- Emergency Contacts Page -->
+    <div id="emergency-page" class="page">
+        <div class="container">
+            <header>
+                <h1 class="logo">🚨 Emergency Contacts</h1>
+                <p class="subtitle">Critical helplines and emergency services</p>
+            </header>
+            <main>
+                <section class="section">
+                    <div class="search-bar">
+                        <select class="filter-select" id="emergencyZoneFilter" style="min-width: 180px;">
+                            <option value="">All Zones</option>
+                            <option value="chandragiri">Chandragiri Zone</option>
+                            <option value="tirupati">Tirupati Zone</option>
+                            <option value="srikalahasti">Srikalahasti Zone</option>
+                            <option value="renigunta">Renigunta Zone</option>
+                            <option value="puttur">Puttur Zone</option>
+                        </select>
+                        <select class="filter-select" id="emergencyTypeFilter">
+                            <option value="">All Types</option>
+                            <option value="critical">Critical</option>
+                            <option value="support">Support</option>
+                            <option value="authority">Authority</option>
+                        </select>
+                    </div>
+                    <div class="emergency-grid" id="emergency-grid">
+                        <!-- Emergency contacts will be dynamically loaded here -->
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Services Page -->
+    <div id="services-page" class="page">
+        <div class="container">
+            <header>
+                <h1 class="logo">🏪 Local Services</h1>
+                <p class="subtitle">Find trusted local services in your area</p>
+            </header>
+            <main>
+                <section class="section">
+                    <h2 class="section-title">
+                        <i class="fas fa-store"></i>
+                        Nearby Services You Can Trust
+                    </h2>
+                    
+                    <div class="search-bar">
+                        <select class="filter-select" id="zoneFilter" style="min-width: 180px;">
+                            <option value="">All Zones</option>
+                            <option value="chandragiri">Chandragiri Zone</option>
+                            <option value="tirupati">Tirupati Zone</option>
+                            <option value="srikalahasti">Srikalahasti Zone</option>
+                            <option value="renigunta">Renigunta Zone</option>
+                            <option value="puttur">Puttur Zone</option>
+                        </select>
+                        <input type="text" class="search-input" id="serviceSearch" placeholder="Search for services...">
+                        <select class="filter-select" id="serviceFilter">
+                            <option value="">All Categories</option>
+                            <option value="clinic">Clinics</option>
+                            <option value="electrician">Electricians</option>
+                            <option value="tailor">Tailors</option>
+                            <option value="auto">Auto Stands</option>
+                            <option value="xerox">Xerox Shops</option>
+                            <option value="grocery">Grocery</option>
+                            <option value="restaurant">Restaurants</option>
+                            <option value="pharmacy">Pharmacies</option>
+                            <option value="atm">ATMs</option>
+                            <option value="transport">Transport</option>
+                            <option value="hotel">Hotels</option>
+                            <option value="shopping">Shopping</option>
+                        </select>
+                        <select class="filter-select" id="ratingFilter" style="min-width: 120px;">
+                            <option value="">All Ratings</option>
+                            <option value="4.5">4.5+ Stars</option>
+                            <option value="4.0">4.0+ Stars</option>
+                            <option value="3.5">3.5+ Stars</option>
+                        </select>
+                    </div>
+
+                    <div class="services-grid" id="servicesGrid">
+                        <!-- Services will be dynamically loaded here -->
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Guidance Page -->
+    <div id="guidance-page" class="page">
+        <div class="container">
+            <header>
+                <h1 class="logo">🧠 Essential Guidance</h1>
+                <p class="subtitle">Important information that can save your life</p>
+            </header>
+            <main>
+                <section class="section">
+                    <h2 class="section-title">
+                        <i class="fas fa-life-ring"></i>
+                        Critical Survival Information
+                    </h2>
+
+                    <div class="guidance-accordion">
+                        <div class="guidance-header" onclick="toggleGuidance(this)">
+                            <span><i class="fas fa-exclamation-triangle"></i> Hidden Emergency Numbers</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="guidance-content">
+                            <div class="guidance-item">Railway Helpline: 139 (for train emergencies and complaints)</div>
+                            <div class="guidance-item">Cyber Crime: 1930 (for online fraud and cyber attacks)</div>
+                            <div class="guidance-item">Anti-Poison: 1800-180-5522 (for poisoning emergencies)</div>
+                            <div class="guidance-item">Senior Citizen Helpline: 14567 (elderly abuse and support)</div>
+                            <div class="guidance-item">LGBTQ+ Support: 1800-270-1234 (crisis intervention)</div>
+                        </div>
+                    </div>
+
+                    <div class="guidance-accordion">
+                        <div class="guidance-header" onclick="toggleGuidance(this)">
+                            <span><i class="fas fa-shield-alt"></i> Legal Rights You Didn't Know</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="guidance-content">
+                            <div class="guidance-item">You can refuse to show your phone to police without a warrant</div>
+                            <div class="guidance-item">Landlords cannot enter your rented space without 24-hour notice</div>
+                            <div class="guidance-item">You have the right to record police interactions in public spaces</div>
+                            <div class="guidance-item">Employers cannot force you to work beyond 8 hours without overtime pay</div>
+                            <div class="guidance-item">You can file a complaint against any government office online</div>
+                        </div>
+                    </div>
+
+                    <div class="guidance-accordion">
+                        <div class="guidance-header" onclick="toggleGuidance(this)">
+                            <span><i class="fas fa-lock"></i> Digital Security Secrets</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="guidance-content">
+                            <div class="guidance-item">Use 2FA on all accounts - most people don't know this prevents 99% of hacks</div>
+                            <div class="guidance-item">Never use public WiFi for banking - use mobile data instead</div>
+                            <div class="guidance-item">Your phone's IMEI can be tracked even when location is off</div>
+                            <div class="guidance-item">Delete old accounts you don't use - they're data goldmines for hackers</div>
+                            <div class="guidance-item">Use a VPN when using public computers or WiFi networks</div>
+                        </div>
+                    </div>
+
+                    <div class="guidance-accordion">
+                        <div class="guidance-header" onclick="toggleGuidance(this)">
+                            <span><i class="fas fa-heart"></i> Health Hacks That Save Money</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="guidance-content">
+                            <div class="guidance-item">Generic medicines work exactly like branded ones - save 70% on costs</div>
+                            <div class="guidance-item">Most government hospitals provide free treatment for emergencies</div>
+                            <div class="guidance-item">Ayurvedic treatments are often covered by insurance if prescribed by doctors</div>
+                            <div class="guidance-item">You can get free health checkups at government dispensaries</div>
+                            <div class="guidance-item">Mental health consultations are free at government hospitals</div>
+                        </div>
+                    </div>
+
+                    <div class="guidance-accordion">
+                        <div class="guidance-header" onclick="toggleGuidance(this)">
+                            <span><i class="fas fa-money-bill-wave"></i> Financial Safety Tips</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="guidance-content">
+                            <div class="guidance-item">Never share your PIN with anyone - banks will never ask for it</div>
+                            <div class="guidance-item">Keep emergency cash hidden at home - digital payments can fail</div>
+                            <div class="guidance-item">Always check your bank statements monthly for unauthorized transactions</div>
+                            <div class="guidance-item">Use different passwords for different accounts - one breach shouldn't affect all</div>
+                            <div class="guidance-item">Keep photocopies of important documents in a safe place</div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+    <!-- Alerts Page -->
+    <section id="alerts-page" class="page">
+  <div class="container">
+    <header>
+      <h1 class="logo">⚠️ Alerts</h1>
+      <p class="subtitle">Latest alerts and updates for your selected zone</p>
+    </header>
+
+    <div class="zone-context">
+      <span>Zone:</span> <strong id="alertsZoneName">-</strong>
+    </div>
+
+    <ul id="alertsList" class="list">
+      <!-- Alerts will be dynamically loaded here -->
+    </ul>
+    <div id="alertsEmpty" class="error" style="display:none;">No alerts available for this zone.</div>
+  </div>
+</section>
+    <!-- About Page -->
+    <section id="about-page" class="page" aria-labelledby="about-title">
+  <div class="container">
+    <header>
+      <h1 id="about-title" class="logo">ℹ️ About ZoneVault</h1>
+      <p class="subtitle">Built for resilience, designed for communities</p>
+    </header>
+
+    <article class="about-card">
+      <p>ZoneVault is a modular, offline-capable web app that consolidates emergency contacts, local services, survival guidance, and real-time alerts for selected zones. It's designed to empower users with reliable, zone-specific information—even without internet access.</p>
+      <ul>
+        <li><strong>Version:</strong> 1.0.0</li>
+        <li><strong>Founder:</strong> WT</li>
+        <li><strong>Tech Stack:</strong> HTML, CSS, JS, JSON, Service Workers</li>
+        <li><strong>Usage:</strong> Navigate via the top menu. Select a zone to view details. Toggle dark mode with the moon icon. Install for offline use.</li>
+      </ul>
+    </article>
+  </div>
+</section>
+
+    <!-- Contact Us Page -->
+    <section id="contact-page" class="page" aria-labelledby="contact-title">
+        <div class="container">
+            <header>
+                <h1 id="contact-title" class="logo">📞 Contact Us</h1>
+                <p class="subtitle">Get in touch with the ZoneVault team</p>
+            </header>
+
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <h3>📧 Email Support</h3>
+                    <p><strong>General Inquiries:</strong></p>
+                    <a href="mailto:Zonevault25@gmail.com">Zonevault25@gmail.com</a>
+                    <p><strong>Technical Issues:</strong></p>
+                    <a href="mailto:Zonevault25@gmail.com">Zonevault25@gmail.com</a>
+                    <p><strong>Emergency Contact Updates:</strong></p>
+                    <a href="mailto:Zonevault25@gmail.com">Zonevault25@gmail.com</a>
+                </div>
+
+                <div class="contact-card">
+                    <h3>📱 Phone Support</h3>
+                    <p><strong>Primary Contact:</strong></p>
+                    <a href="tel:+919490560424">+91-9490560424</a>
+                    <p><strong>Secondary Contact:</strong></p>
+                    <a href="tel:+91-9876543001">+91-9876543001</a>
+                    <p><strong>Emergency Hotline:</strong></p>
+                    <a href="tel:+91-9876543000">+91-9876543000</a>
+                    <p><strong>Business Hours:</strong> 9 AM - 6 PM (Mon-Fri)</p>
+                </div>
+
+                <div class="contact-card">
+                    <h3>🏢 Office Address</h3>
+                    <p><strong>ZoneVault Headquarters</strong></p>
+                    <p>123 Safety Street<br>
+                    Emergency District<br>
+                    Tirupati, Andhra Pradesh 517501<br>
+                    India</p>
+                    <p><strong>Office Hours:</strong> 9 AM - 6 PM (Mon-Fri)</p>
+                </div>
+
+                <div class="contact-card">
+                    <h3>🌐 Online Support</h3>
+                    <p><strong>Website:</strong></p>
+                    <a href="http://localhost/zonevault" target="_blank">http://localhost/zonevault</a>
+                    <p><strong>Documentation:</strong></p>
+                    <a href="http://localhost/zonevault/SETUP_GUIDE.md" target="_blank">Setup Guide</a>
+                    <p><strong>Report Issues:</strong></p>
+                    <a href="mailto:bugs@zonevault.local">bugs@zonevault.local</a>
+                </div>
+
+                <div class="contact-card">
+                    <h3>👥 Community Support</h3>
+                    <p><strong>Zone Administrators:</strong></p>
+                    <p>Contact your local zone administrator for zone-specific issues and updates.</p>
+                    <p><strong>Community Forum:</strong></p>
+                    <a href="mailto:community@zonevault.local">community@zonevault.local</a>
+                </div>
+
+                <div class="contact-card">
+                    <h3>🚨 Emergency Contact</h3>
+                    <p><strong>For immediate safety concerns:</strong></p>
+                    <a href="tel:100">Police: 100</a><br>
+                    <a href="tel:108">Ambulance: 108</a><br>
+                    <a href="tel:101">Fire: 101</a>
+                    <p><strong>ZoneVault Emergency:</strong></p>
+                    <a href="tel:+91-9876543999">+91-9876543999</a>
+                </div>
+            </div>
+
+            <div class="contact-form-section">
+                <h2>💬 Send us a Message</h2>
+                <form class="contact-form" onsubmit="handleContactForm(event)">
+                    <div class="form-group">
+                        <label for="contactName">Your Name</label>
+                        <input type="text" id="contactName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactEmail">Email Address</label>
+                        <input type="email" id="contactEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactPhone">Phone Number</label>
+                        <input type="tel" id="contactPhone">
+                    </div>
+                    <div class="form-group">
+                        <label for="contactZone">Your Zone</label>
+                        <select id="contactZone" required>
+                            <option value="">Select Zone</option>
+                            <option value="chandragiri">Chandragiri Zone</option>
+                            <option value="tirupati">Tirupati Zone</option>
+                            <option value="srikalahasti">Srikalahasti Zone</option>
+                            <option value="renigunta">Renigunta Zone</option>
+                            <option value="puttur">Puttur Zone</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactSubject">Subject</label>
+                        <select id="contactSubject" required>
+                            <option value="">Select Subject</option>
+                            <option value="general">General Inquiry</option>
+                            <option value="technical">Technical Support</option>
+                            <option value="emergency">Emergency Contact Update</option>
+                            <option value="service">Service Information</option>
+                            <option value="bug">Bug Report</option>
+                            <option value="feature">Feature Request</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactMessage">Message</label>
+                        <textarea id="contactMessage" rows="5" required placeholder="Please describe your inquiry in detail..."></textarea>
+                    </div>
+                    <button type="submit" class="auth-btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Page -->
+    <div id="admin-page" class="page">
+        <div class="container">
+           <header>
+  <h1 class="logo">🔧 Admin Panel</h1>
+  
+
+<main>
+  <section class="section">
+    <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1rem;">
+      <button class="btn" type="button" data-admin-tab="add" onclick="showAdminTab('add')">Add Zone</button>
+      <button class="btn btn-secondary" type="button" data-admin-tab="service" onclick="showAdminTab('service')">Add Service to Existing Zone</button>
+      <button class="btn btn-secondary" type="button" data-admin-tab="newzonecs" onclick="showAdminTab('newzonecs')">Add Contacts/Services to New Zones</button>
+      <button class="btn btn-secondary" type="button" data-admin-tab="addECExisting" onclick="showAdminTab('addECExisting')">Add Emergency to Existing Zone</button>
+      <button class="btn btn-secondary" type="button" data-admin-tab="messages" onclick="showAdminTab('messages')">User Messages</button>
+    </div>
+
+    <div id="adminTab-add" class="admin-tab-pane">
+      <h2 class="section-title"><i class="fas fa-plus-circle"></i> Add New Zone</h2>
+      <form id="zonesForm" onsubmit="handleAddZone(event)">
+        <div class="form-group">
+          <label for="zoneName">Zone Name</label>
+          <input type="text" id="zoneName" placeholder="e.g., Central City Zone" required>
+        </div>
+
+      <div class="form-group">
+        <label for="zoneDescription">Description</label>
+        <textarea id="zoneDescription" placeholder="Enter zone description" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="zoneAddress">Address / Location</label>
+        <input type="text" id="zoneAddress" placeholder="e.g., 123 Main Street" required>
+      </div>
+
+      <div class="form-group">
+        <label for="zoneLat">Latitude</label>
+        <input type="number" id="zoneLat" step="any" placeholder="e.g., 17.2567" required>
+      </div>
+
+      <div class="form-group">
+        <label for="zoneLng">Longitude</label>
+        <input type="number" id="zoneLng" step="any" placeholder="e.g., 80.6543" required>
+      </div>
+
+      <div class="form-group">
+        <label for="zoneIcon">Icon</label>
+        <input type="text" id="zoneIcon" placeholder="e.g., 📍 or zone.png">
+      </div>
+
+      <div class="form-group">
+        <label for="zoneAlerts">Alerts (comma separated)</label>
+        <input type="text" id="zoneAlerts" placeholder="e.g., Flood Alert, Power Cut">
+      </div>
+
+      <h3 class="section-title" style="font-size:1.2rem; margin-top:1rem;"><i class="fas fa-phone-alt"></i> Emergency Contacts</h3>
+      <div class="form-group">
+        <label for="newECName">Name</label>
+        <input id="newECName" type="text" placeholder="e.g., Local Police">
+      </div>
+      <div class="form-group">
+        <label for="newECNumber">Phone</label>
+        <input id="newECNumber" type="text" placeholder="e.g., 100 or +91-9000000000">
+      </div>
+      <div class="form-group">
+        <label for="newECType">Type</label>
+        <select id="newECType">
+          <option value="">Select</option>
+          <option value="critical">Critical</option>
+          <option value="support">Support</option>
+          <option value="authority">Authority</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="newECIcon">Icon</label>
+        <input id="newECIcon" type="text" placeholder="e.g., 🚓 or 🏥">
+      </div>
+      <div class="form-group">
+        <label for="newECDesc">Description</label>
+        <input id="newECDesc" type="text" placeholder="e.g., 24/7">
+      </div>
+      <button type="button" class="btn" onclick="addNewZoneContact()">➕ Add Contact</button>
+      <ul id="newECList" class="list"></ul>
+
+      <h3 class="section-title" style="font-size:1.2rem; margin-top:1rem;"><i class="fas fa-store"></i> Services</h3>
+      <div class="form-group">
+        <label for="newSvcName">Service Name</label>
+        <input id="newSvcName" type="text" placeholder="e.g., City Clinic">
+      </div>
+      <div class="form-group">
+        <label for="newSvcCategory">Category</label>
+        <input id="newSvcCategory" type="text" placeholder="e.g., clinic, electrician">
+      </div>
+      <div class="form-group">
+        <label for="newSvcAddress">Address</label>
+        <input id="newSvcAddress" type="text" placeholder="e.g., 12 MG Road, Gudur">
+      </div>
+      <div class="form-group">
+        <label for="newSvcNumber">Phone</label>
+        <input id="newSvcNumber" type="text" placeholder="e.g., +91-9000000000">
+      </div>
+      <div class="form-group">
+        <label for="newSvcDesc">Description</label>
+        <input id="newSvcDesc" type="text" placeholder="e.g., Open 9-9">
+      </div>
+      <div class="form-group">
+        <label for="newSvcRating">Rating (0-5, optional)</label>
+        <input id="newSvcRating" type="number" step="0.1" min="0" max="5" placeholder="e.g., 4.3">
+      </div>
+      <div class="form-group">
+        <label><input id="newSvcVerified" type="checkbox"> Verified</label>
+      </div>
+      <button type="button" class="btn" onclick="addNewZoneService()">➕ Add Service</button>
+      <ul id="newSvcList" class="list"></ul>
+
+        <button type="submit" class="auth-btn">💾 Save Zone</button>
+      </form>
+      <div id="adminCustomZonesSection" class="section" style="margin-top:1rem; display:none;">
+        <h3 class="section-title" style="font-size:1.2rem;"><i class="fas fa-database"></i> Manage Custom Zones</h3>
+        <div id="adminCustomZonesList"></div>
+      </div>
+    </div>
+
+    <div id="adminTab-service" class="admin-tab-pane" style="display:none;">
+      <h2 class="section-title"><i class="fas fa-tools"></i> Add Service to Existing Zone</h2>
+      <form id="addServiceForm" onsubmit="handleAddServiceToZone(event)">
+        <div class="form-group">
+          <label for="adminExistingZoneSelect">Select Zone</label>
+          <select id="adminExistingZoneSelect" required>
+            <option value="">Select zone</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="serviceName">Service Name</label>
+          <input id="serviceName" type="text" placeholder="e.g., Metro Pharmacy" required>
+        </div>
+        <div class="form-group">
+          <label for="serviceCategory">Category</label>
+          <input id="serviceCategory" type="text" placeholder="e.g., pharmacy" required>
+        </div>
+        <div class="form-group">
+          <label for="serviceAddress">Address</label>
+          <input id="serviceAddress" type="text" placeholder="e.g., Station Road, Gudur">
+        </div>
+        <div class="form-group">
+          <label for="servicePhone">Phone</label>
+          <input id="servicePhone" type="text" placeholder="e.g., +91-9000000003">
+        </div>
+        <div class="form-group">
+          <label for="serviceDescription">Description</label>
+          <input id="serviceDescription" type="text" placeholder="e.g., Open 24 hours">
+        </div>
+        <div class="form-group">
+          <label for="serviceRating">Rating (0-5, optional)</label>
+          <input id="serviceRating" type="number" step="0.1" min="0" max="5" placeholder="e.g., 4.6">
+        </div>
+        <div class="form-group">
+          <label><input id="serviceVerified" type="checkbox"> Verified</label>
+        </div>
+        <button type="submit" class="auth-btn">➕ Add Service</button>
+      </form>
+      <div id="adminServicesSection" class="section" style="margin-top:1rem; display:none;">
+        <h3 class="section-title" style="font-size:1.2rem;"><i class="fas fa-list"></i> Services in Selected Zone</h3>
+        <div id="adminServicesList"></div>
+      </div>
+    </div>
+
+    <div id="adminTab-newzonecs" class="admin-tab-pane" style="display:none;">
+      <h2 class="section-title"><i class="fas fa-user-shield"></i> Add Contacts/Services to New Zones</h2>
+      <form id="addCSNewZoneForm" onsubmit="handleAddContactsServicesToNewZone(event)">
+        <div class="form-group">
+          <label for="adminNewZoneSelect">Select New Zone</label>
+          <select id="adminNewZoneSelect" required>
+            <option value="">Select new zone</option>
+          </select>
+        </div>
+        <h3 class="section-title" style="font-size:1.2rem; margin-top:1rem;"><i class="fas fa-phone-alt"></i> Emergency Contacts</h3>
+        <div class="form-group">
+          <label for="nzECName">Name</label>
+          <input id="nzECName" type="text" placeholder="e.g., Local Police">
+        </div>
+        <div class="form-group">
+          <label for="nzECNumber">Phone</label>
+          <input id="nzECNumber" type="text" placeholder="e.g., 100">
+        </div>
+        <div class="form-group">
+          <label for="nzECType">Type</label>
+          <select id="nzECType">
+            <option value="">Select</option>
+            <option value="critical">Critical</option>
+            <option value="support">Support</option>
+            <option value="authority">Authority</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="nzECIcon">Icon</label>
+          <input id="nzECIcon" type="text" placeholder="e.g., 🚓">
+        </div>
+        <div class="form-group">
+          <label for="nzECDesc">Description</label>
+          <input id="nzECDesc" type="text" placeholder="e.g., 24/7">
+        </div>
+        <button type="button" class="btn" onclick="addNZContact()">➕ Add Contact</button>
+        <ul id="nzECList" class="list"></ul>
+
+        <h3 class="section-title" style="font-size:1.2rem; margin-top:1rem;"><i class="fas fa-store"></i> Services</h3>
+        <div class="form-group">
+          <label for="nzSvcName">Service Name</label>
+          <input id="nzSvcName" type="text" placeholder="e.g., Clinic">
+        </div>
+        <div class="form-group">
+          <label for="nzSvcCategory">Category</label>
+          <input id="nzSvcCategory" type="text" placeholder="e.g., clinic">
+        </div>
+        <div class="form-group">
+          <label for="nzSvcAddress">Address</label>
+          <input id="nzSvcAddress" type="text" placeholder="e.g., 2nd Cross, Market Area">
+        </div>
+        <div class="form-group">
+          <label for="nzSvcNumber">Phone</label>
+          <input id="nzSvcNumber" type="text" placeholder="e.g., +91-9000000000">
+        </div>
+        <div class="form-group">
+          <label for="nzSvcDesc">Description</label>
+          <input id="nzSvcDesc" type="text" placeholder="e.g., Open 9-9">
+        </div>
+        <div class="form-group">
+          <label for="nzSvcRating">Rating (0-5, optional)</label>
+          <input id="nzSvcRating" type="number" step="0.1" min="0" max="5" placeholder="e.g., 4.0">
+        </div>
+        <div class="form-group">
+          <label><input id="nzSvcVerified" type="checkbox"> Verified</label>
+        </div>
+        <button type="button" class="btn" onclick="addNZService()">➕ Add Service</button>
+        <ul id="nzSvcList" class="list"></ul>
+
+        <button type="submit" class="auth-btn">💾 Save to Zone</button>
+      </form>
+    </div>
+
+    <div id="adminTab-addECExisting" class="admin-tab-pane" style="display:none;">
+      <h2 class="section-title"><i class="fas fa-user-shield"></i> Add Emergency Contact to Existing Zone</h2>
+      <form id="addECExistingForm" onsubmit="handleAddEmergencyToExistingZone(event)">
+        <div class="form-group">
+          <label for="adminExistingECZoneSelect">Select Zone</label>
+          <select id="adminExistingECZoneSelect" required>
+            <option value="">Select zone</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="exECName">Name</label>
+          <input id="exECName" type="text" required placeholder="e.g., Local Police">
+        </div>
+        <div class="form-group">
+          <label for="exECNumber">Phone</label>
+          <input id="exECNumber" type="text" required placeholder="e.g., 100">
+        </div>
+        <div class="form-group">
+          <label for="exECType">Type</label>
+          <select id="exECType" required>
+            <option value="">Select</option>
+            <option value="critical">Critical</option>
+            <option value="support">Support</option>
+            <option value="authority">Authority</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="exECIcon">Icon</label>
+          <input id="exECIcon" type="text" placeholder="e.g., 🚓">
+        </div>
+        <div class="form-group">
+          <label for="exECDesc">Description</label>
+          <input id="exECDesc" type="text" placeholder="e.g., 24/7">
+        </div>
+        <button type="submit" class="auth-btn">➕ Add Emergency Contact</button>
+      </form>
+      <div id="adminContactsSection" class="section" style="margin-top:1rem; display:none;">
+        <h3 class="section-title" style="font-size:1.2rem;"><i class="fas fa-list"></i> Emergency Contacts in Selected Zone</h3>
+        <div id="adminContactsList"></div>
+      </div>
+    </div>
+
+    <div id="adminTab-messages" class="admin-tab-pane" style="display:none;">
+      <h2 class="section-title"><i class="fas fa-inbox"></i> User Messages</h2>
+      <div id="adminMessages"></div>
+    </div>
+  </section>
+</main>
+
+        </div>
+    </div>
+
+    <!-- Login Page -->
+    <div id="login-page" class="page active">
+        <div class="auth-container">
+            <div class="auth-card">
+                <h2 class="auth-title">Login to ZoneVault</h2>
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="loginEmail">Email Address</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="auth-btn">Login</button>
+                </form>
+                <p>Don't have an account? <a href="#" class="auth-link" onclick="showPage('signup')">Sign Up</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Page -->
+    <div id="signup-page" class="page">
+        <div class="auth-container">
+            <div class="auth-card">
+                <h2 class="auth-title">Create Account</h2>
+                <form onsubmit="handleSignup(event)">
+                    <div class="form-group">
+                        <label for="signupName">Full Name</label>
+                        <input type="text" id="signupName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupEmail">Email Address</label>
+                        <input type="email" id="signupEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPhone">Phone Number</label>
+                        <input type="tel" id="signupPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <input type="password" id="signupPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupZone">Your Zone</label>
+                        <select id="signupZone" required>
+                            <option value="">Select Zone</option>
+                            <option value="chandragiri">Chandragiri Zone</option>
+                            <option value="tirupati">Tirupati Zone</option>
+                            <option value="srikalahasti">Srikalahasti Zone</option>
+                            <option value="renigunta">Renigunta Zone</option>
+                            <option value="puttur">Puttur Zone</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="auth-btn">Create Account</button>
+                </form>
+                <p>Already have an account? <a href="#" class="auth-link" onclick="showPage('login')">Login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Zone-specific pages -->
+    <div id="chandragiri-page" class="page">
+        <div class="container">
+            <header>
+                <h1 class="logo">📍 Chandragiri Zone</h1>
+                <p class="subtitle">Student residential area with hostels and colleges</p>
+                <div class="zone-badge">Near University Campus, Chandragiri Hills</div>
+            </header>
+            <main>
+                <section class="section">
+                    <h2 class="section-title">
+                        <i class="fas fa-phone-alt"></i>
+                        Local Emergency Contacts
+                    </h2>
+                    <div class="emergency-grid">
+                        <div class="emergency-card critical">
+                            <div class="contact-name">🚓 Chandragiri Police Station</div>
+                            <a href="tel:+91-9876543201" class="contact-number">+91-9876543201</a>
+                            <div class="contact-description">Main police station for Chandragiri zone. Available 24/7 for emergencies.</div>
+                        </div>
+                        
+                        <div class="emergency-card critical">
+                            <div class="contact-name">👮 SI Mobile - Constable Rajesh</div>
+                            <a href="tel:+91-9876543202" class="contact-number">+91-9876543202</a>
+                            <div class="contact-description">Direct mobile number for immediate assistance in the zone.</div>
+                        </div>
+                        
+                        <div class="emergency-card support">
+                            <div class="contact-name">🏥 Chandragiri Health Center</div>
+                            <a href="tel:+91-9876543203" class="contact-number">+91-9876543203</a>
+                            <div class="contact-description">Local health center for medical emergencies.</div>
+                        </div>
+                        
+                        <div class="emergency-card authority">
+                            <div class="contact-name">🏠 Hostel Warden Office</div>
+                            <a href="tel:+91-9876543204" class="contact-number">+91-9876543204</a>
+                            <div class="contact-description">Contact for hostel-related issues and emergencies.</div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 ZoneVault. Keeping communities safe and connected.</p>
+            <p style="margin-top: 0.5rem; opacity: 0.8;">
+                Built with ❤️ for the community
+            </p>
+        </div>
+    </footer>
+
+	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+		integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+		crossorigin=""></script>
+	<script src="script.js" defer></script>
+    <script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('sw.js').catch(function(err){
+                console.warn('SW registration failed', err);
+            });
+        });
+    }
+    </script>
+</body>
+</html>

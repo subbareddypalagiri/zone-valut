@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <section id="contact-page" class="page" aria-labelledby="contact-title">
+        <div class="container">
+            <header>
+                <h1 id="contact-title" class="logo">📞 Contact Us</h1>
+                <p class="subtitle">Get in touch with the ZoneVault team</p>
+            </header>
+
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <h3>📧 Email Support</h3>
+                    <p><strong>General Inquiries:</strong></p>
+                    <a href="mailto:Zonevault25@gmail.com">Zonevault25@gmail.com</a>
+                    <p><strong>Technical Issues:</strong></p>
+                    <a href="mailto:Zonevault25@gmail.com">Zonevault25@gmail.com</a>
+                    <p><strong>Emergency Contact Updates:</strong></p>
+                    <a href="mailto:Zonevault25@gmail.com">Zonevault25@gmail.com</a>
+                </div>
+
+                <div class="contact-card">
+                    <h3>📱 Phone Support</h3>
+                    <p><strong>Primary Contact:</strong></p>
+                    <a href="tel:+919490560424">+91-9490560424</a>
+                    <p><strong>Secondary Contact:</strong></p>
+                    <a href="tel:+91-9876543001">+91-9876543001</a>
+                    <p><strong>Emergency Hotline:</strong></p>
+                    <a href="tel:+91-9876543000">+91-9876543000</a>
+                    <p><strong>Business Hours:</strong> 9 AM - 6 PM (Mon-Fri)</p>
+                </div>
+
+                <div class="contact-card">
+                    <h3>🏢 Office Address</h3>
+                    <p><strong>ZoneVault Headquarters</strong></p>
+                    <p>123 Safety Street<br>
+                    Emergency District<br>
+                    Tirupati, Andhra Pradesh 517501<br>
+                    India</p>
+                    <p><strong>Office Hours:</strong> 9 AM - 6 PM (Mon-Fri)</p>
+                </div>
+
+                <div class="contact-card">
+                    <h3>🌐 Online Support</h3>
+                    <p><strong>Website:</strong></p>
+                    <a href="http://localhost/zonevault" target="_blank">http://localhost/zonevault</a>
+                    <p><strong>Documentation:</strong></p>
+                    <a href="http://localhost/zonevault/SETUP_GUIDE.md" target="_blank">Setup Guide</a>
+                    <p><strong>Report Issues:</strong></p>
+                    <a href="mailto:bugs@zonevault.local">bugs@zonevault.local</a>
+                </div>
+
+                <div class="contact-card">
+                    <h3>👥 Community Support</h3>
+                    <p><strong>Zone Administrators:</strong></p>
+                    <p>Contact your local zone administrator for zone-specific issues and updates.</p>
+                    <p><strong>Community Forum:</strong></p>
+                    <a href="mailto:community@zonevault.local">community@zonevault.local</a>
+                </div>
+
+                <div class="contact-card">
+                    <h3>🚨 Emergency Contact</h3>
+                    <p><strong>For immediate safety concerns:</strong></p>
+                    <a href="tel:100">Police: 100</a><br>
+                    <a href="tel:108">Ambulance: 108</a><br>
+                    <a href="tel:101">Fire: 101</a>
+                    <p><strong>ZoneVault Emergency:</strong></p>
+                    <a href="tel:+91-9876543999">+91-9876543999</a>
+                </div>
+            </div>
+
+            <div class="contact-form-section">
+                <h2>💬 Send us a Message</h2>
+                <form class="contact-form" onsubmit="handleContactForm(event)">
+                    <div class="form-group">
+                        <label for="contactName">Your Name</label>
+                        <input type="text" id="contactName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactEmail">Email Address</label>
+                        <input type="email" id="contactEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactPhone">Phone Number</label>
+                        <input type="tel" id="contactPhone">
+                    </div>
+                    <div class="form-group">
+                        <label for="contactZone">Your Zone</label>
+                        <select id="contactZone" required>
+                            <option value="">Select Zone</option>
+                            <option value="chandragiri">Chandragiri Zone</option>
+                            <option value="tirupati">Tirupati Zone</option>
+                            <option value="srikalahasti">Srikalahasti Zone</option>
+                            <option value="renigunta">Renigunta Zone</option>
+                            <option value="puttur">Puttur Zone</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactSubject">Subject</label>
+                        <select id="contactSubject" required>
+                            <option value="">Select Subject</option>
+                            <option value="general">General Inquiry</option>
+                            <option value="technical">Technical Support</option>
+                            <option value="emergency">Emergency Contact Update</option>
+                            <option value="service">Service Information</option>
+                            <option value="bug">Bug Report</option>
+                            <option value="feature">Feature Request</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactMessage">Message</label>
+                        <textarea id="contactMessage" rows="5" required placeholder="Please describe your inquiry in detail..."></textarea>
+                    </div>
+                    <button type="submit" class="auth-btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

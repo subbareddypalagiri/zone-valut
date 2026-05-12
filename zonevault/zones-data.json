@@ -1,0 +1,1062 @@
+{
+  "zones": [
+    {
+      "id": "chandragiri",
+      "name": "Chandragiri Zone",
+      "icon": "📍",
+      "description": "Student residential area with hostels and colleges",
+      "address": "Near University Campus, Chandragiri Hills",
+      "population": "~15,000 students",
+      "keyAreas": ["Hostel blocks", "College campus", "Student market"],
+      "coordinates": { "lat": 13.588, "lng": 79.318 },
+      "alerts": [
+        "Traffic diversion near University Road 6–9 PM",
+        "Water supply maintenance on Friday 10 AM–2 PM",
+        "Power outage scheduled in Hostel Block B 2–4 PM"
+      ],
+      "emergencyContacts": [
+        {
+          "name": "Chandragiri Police Station",
+          "number": "+91-9876543201",
+          "type": "critical",
+          "icon": "🚓",
+          "description": "Main police station for Chandragiri zone. Available 24/7 for emergencies."
+        },
+        {
+          "name": "SI Mobile - Constable Rajesh",
+          "number": "+91-9876543202",
+          "type": "critical",
+          "icon": "👮",
+          "description": "Direct mobile number for immediate assistance in the zone."
+        },
+        {
+          "name": "Chandragiri Health Center",
+          "number": "+91-9876543203",
+          "type": "support",
+          "icon": "🏥",
+          "description": "Local health center for medical emergencies."
+        },
+        {
+          "name": "Hostel Warden Office",
+          "number": "+91-9876543204",
+          "type": "authority",
+          "icon": "🏠",
+          "description": "Contact for hostel-related issues and emergencies."
+        },
+        {
+          "name": "College Security Office",
+          "number": "+91-9876543205",
+          "type": "authority",
+          "icon": "🏫",
+          "description": "Campus security for student safety concerns."
+        },
+        {
+          "name": "Student Union Helpline",
+          "number": "+91-9876543206",
+          "type": "support",
+          "icon": "👥",
+          "description": "Student support and grievance redressal."
+        }
+      ],
+      "services": [
+        {
+          "name": "Dr. Kumar's Clinic",
+          "category": "clinic",
+          "number": "+91-9876543210",
+          "description": "General physician, open 9 AM - 9 PM",
+          "verified": true,
+          "rating": 4.5,
+          "address": "123 University Road, Near Hostel Block A, Chandragiri",
+          "location": { "lat": 13.588, "lng": 79.318 },
+          "hours": "9:00 AM - 9:00 PM",
+          "priceRange": "₹200-500",
+          "services": ["General consultation", "Emergency care", "Health checkups"],
+          "specialties": ["General Medicine", "Emergency Medicine"],
+          "paymentMethods": ["Cash", "UPI", "Card"],
+          "languages": ["English", "Hindi", "Telugu"]
+        },
+        {
+          "name": "Electric Solutions",
+          "category": "electrician",
+          "number": "+91-9876543211",
+          "description": "24/7 electrical repairs and installations",
+          "verified": true,
+          "rating": 4.2,
+          "address": "45 Tech Park Road, Chandragiri Industrial Area",
+          "location": { "lat": 13.590, "lng": 79.320 },
+          "hours": "24/7 Emergency Service",
+          "priceRange": "₹300-800",
+          "services": ["Wiring repairs", "Switch installation", "Power backup", "Emergency calls"],
+          "specialties": ["Residential", "Commercial", "Industrial"],
+          "paymentMethods": ["Cash", "UPI", "Card"],
+          "languages": ["English", "Hindi", "Telugu"]
+        },
+        {
+          "name": "Quick Stitch Tailors",
+          "category": "tailor",
+          "number": "+91-9876543212",
+          "description": "Clothing alterations and custom stitching",
+          "verified": false
+        },
+        {
+          "name": "Chandragiri Auto Stand",
+          "category": "auto",
+          "number": "+91-9876543213",
+          "description": "Auto-rickshaw services in the zone",
+          "verified": true
+        },
+        {
+          "name": "Print & Copy Center",
+          "category": "xerox",
+          "number": "+91-9876543214",
+          "description": "Photocopy, printing, and document services",
+          "verified": false
+        },
+        {
+          "name": "Fresh Daily Mart",
+          "category": "grocery",
+          "number": "+91-9876543215",
+          "description": "Daily essentials and fresh produce",
+          "verified": true
+        },
+        {
+          "name": "Student's Delight",
+          "category": "restaurant",
+          "number": "+91-9876543216",
+          "description": "Budget-friendly meals for students",
+          "verified": false
+        },
+        {
+          "name": "Dental Care Center",
+          "category": "clinic",
+          "number": "+91-9876543217",
+          "description": "Dental treatments and consultations",
+          "verified": false
+        },
+        {
+          "name": "MedLife Pharmacy",
+          "category": "pharmacy",
+          "number": "+91-9876543218",
+          "description": "24/7 medicine delivery and consultation",
+          "verified": true
+        },
+        {
+          "name": "SBI ATM Center",
+          "category": "atm",
+          "number": "+91-9876543219",
+          "description": "24/7 ATM services and cash withdrawal",
+          "verified": false
+        },
+        {
+          "name": "Mobile Repair Shop",
+          "category": "repair",
+          "number": "+91-9876543220",
+          "description": "Mobile phone repairs and accessories",
+          "verified": false
+        },
+        {
+          "name": "Internet Cafe",
+          "category": "internet",
+          "number": "+91-9876543221",
+          "description": "Internet access and printing services",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "id": "tirupati",
+      "name": "Tirupati Zone",
+      "icon": "🕉️",
+      "description": "Temple city with religious tourism and commercial areas",
+      "address": "Tirupati City Center, Near Venkateswara Temple",
+      "population": "~35,000 residents",
+      "keyAreas": ["Temple complex", "Bus stand", "Railway station", "Hotels"],
+      "coordinates": { "lat": 13.6288, "lng": 79.4192 },
+      "alerts": [
+        "High pilgrim footfall expected this weekend",
+        "Railway station crowd management advisory",
+        "Heatwave alert — stay hydrated"
+      ],
+      "emergencyContacts": [
+        {
+          "name": "Tirupati City Police",
+          "number": "+91-9876543301",
+          "type": "critical",
+          "icon": "🚓",
+          "description": "Main police station for Tirupati city. Available 24/7."
+        },
+        {
+          "name": "Temple Security",
+          "number": "+91-9876543302",
+          "type": "critical",
+          "icon": "🛡️",
+          "description": "Temple security for pilgrim safety and crowd control."
+        },
+        {
+          "name": "Tirupati General Hospital",
+          "number": "+91-9876543303",
+          "type": "support",
+          "icon": "🏥",
+          "description": "Main government hospital for medical emergencies."
+        },
+        {
+          "name": "Tourist Police",
+          "number": "+91-9876543304",
+          "type": "support",
+          "icon": "👮‍♂️",
+          "description": "Specialized tourist assistance and safety."
+        },
+        {
+          "name": "Railway Police",
+          "number": "+91-9876543305",
+          "type": "authority",
+          "icon": "🚂",
+          "description": "Railway station security and assistance."
+        },
+        {
+          "name": "Fire Station",
+          "number": "+91-9876543306",
+          "type": "critical",
+          "icon": "🔥",
+          "description": "Fire emergency response and rescue services."
+        },
+        {
+          "name": "Municipal Office",
+          "number": "+91-9876543307",
+          "type": "authority",
+          "icon": "🏛️",
+          "description": "City administration and civic services."
+        },
+        {
+          "name": "Women's Help Desk",
+          "number": "+91-9876543308",
+          "type": "support",
+          "icon": "👩",
+          "description": "Women's safety and assistance center."
+        }
+      ],
+      "services": [
+        {
+          "name": "Tirupati Medical Center",
+          "category": "clinic",
+          "number": "+91-9876543310",
+          "description": "Multi-specialty hospital with emergency care",
+          "verified": true
+        },
+        {
+          "name": "Temple Prasadam Counter",
+          "category": "food",
+          "number": "+91-9876543311",
+          "description": "Sacred food distribution and booking",
+          "verified": true
+        },
+        {
+          "name": "Hotel Booking Service",
+          "category": "hotel",
+          "number": "+91-9876543312",
+          "description": "Accommodation booking for pilgrims",
+          "verified": true
+        },
+        {
+          "name": "Tourist Guide Services",
+          "category": "tourist",
+          "number": "+91-9876543313",
+          "description": "Licensed tour guides and travel assistance",
+          "verified": true
+        },
+        {
+          "name": "Money Exchange",
+          "category": "finance",
+          "number": "+91-9876543314",
+          "description": "Currency exchange and banking services",
+          "verified": false
+        },
+        {
+          "name": "Photography Services",
+          "category": "photography",
+          "number": "+91-9876543315",
+          "description": "Temple photography and souvenir photos",
+          "verified": false
+        },
+        {
+          "name": "Transportation Hub",
+          "category": "transport",
+          "number": "+91-9876543316",
+          "description": "Bus, taxi, and auto-rickshaw services",
+          "verified": true
+        },
+        {
+          "name": "Shopping Complex",
+          "category": "shopping",
+          "number": "+91-9876543317",
+          "description": "Religious items and general shopping",
+          "verified": false
+        },
+        {
+          "name": "Restaurant Row",
+          "category": "restaurant",
+          "number": "+91-9876543318",
+          "description": "Vegetarian restaurants and food courts",
+          "verified": true
+        },
+        {
+          "name": "Internet Kiosk",
+          "category": "internet",
+          "number": "+91-9876543319",
+          "description": "Internet access and online booking services",
+          "verified": false
+        },
+        {
+          "name": "Luggage Storage",
+          "category": "storage",
+          "number": "+91-9876543320",
+          "description": "Secure luggage storage for pilgrims",
+          "verified": true
+        },
+        {
+          "name": "ATM Cluster",
+          "category": "atm",
+          "number": "+91-9876543321",
+          "description": "Multiple bank ATMs and cash services",
+          "verified": true
+        },
+        {
+          "name": "Pharmacy Chain",
+          "category": "pharmacy",
+          "number": "+91-9876543322",
+          "description": "24/7 medicine availability and delivery",
+          "verified": true
+        },
+        {
+          "name": "Electrician Services",
+          "category": "electrician",
+          "number": "+91-9876543323",
+          "description": "Emergency electrical repairs and maintenance",
+          "verified": false
+        },
+        {
+          "name": "Tailor Shop",
+          "category": "tailor",
+          "number": "+91-9876543324",
+          "description": "Traditional clothing and alterations",
+          "verified": false
+        },
+        {
+          "name": "Xerox Center",
+          "category": "xerox",
+          "number": "+91-9876543325",
+          "description": "Document copying and printing services",
+          "verified": false
+        },
+        {
+          "name": "Grocery Store",
+          "category": "grocery",
+          "number": "+91-9876543326",
+          "description": "Daily essentials and religious items",
+          "verified": false
+        },
+        {
+          "name": "Mobile Repair",
+          "category": "repair",
+          "number": "+91-9876543327",
+          "description": "Mobile phone repairs and accessories",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "id": "srikalahasti",
+      "name": "Srikalahasti Zone",
+      "icon": "🌪️",
+      "description": "Ancient temple town with textile industry and heritage sites",
+      "address": "Srikalahasti Town, Near Panakala Narasimha Swamy Temple",
+      "population": "~25,000 residents",
+      "keyAreas": ["Temple complex", "Textile markets", "Heritage sites", "Industrial area"],
+      "coordinates": { "lat": 13.7515, "lng": 79.7036 },
+      "alerts": [
+        "Temple festival route changes announced",
+        "Strong winds expected in evening — secure loose items",
+        "Market hours extended till 10 PM"
+      ],
+      "emergencyContacts": [
+        {
+          "name": "Srikalahasti Police Station",
+          "number": "+91-9876543401",
+          "type": "critical",
+          "icon": "🚓",
+          "description": "Local police station serving Srikalahasti town."
+        },
+        {
+          "name": "Srikalahasti Hospital",
+          "number": "+91-9876543402",
+          "type": "support",
+          "icon": "🏥",
+          "description": "Government hospital with emergency services."
+        },
+        {
+          "name": "Fire Station",
+          "number": "+91-9876543403",
+          "type": "critical",
+          "icon": "🔥",
+          "description": "Fire emergency response and rescue services."
+        },
+        {
+          "name": "Municipal Office",
+          "number": "+91-9876543404",
+          "type": "authority",
+          "icon": "🏛️",
+          "description": "Town administration and civic services."
+        },
+        {
+          "name": "Industrial Safety Office",
+          "number": "+91-9876543405",
+          "type": "authority",
+          "icon": "🏭",
+          "description": "Industrial safety and worker welfare."
+        }
+      ],
+      "services": [
+        {
+          "name": "Srikalahasti Medical Center",
+          "category": "clinic",
+          "number": "+91-9876543410",
+          "description": "Primary healthcare center with emergency care",
+          "verified": true
+        },
+        {
+          "name": "Textile Market Hub",
+          "category": "shopping",
+          "number": "+91-9876543411",
+          "description": "Wholesale and retail textile market",
+          "verified": true
+        },
+        {
+          "name": "Temple Darshan Services",
+          "category": "tourist",
+          "number": "+91-9876543412",
+          "description": "Temple visit arrangements and guidance",
+          "verified": true
+        },
+        {
+          "name": "Heritage Tour Guides",
+          "category": "tourist",
+          "number": "+91-9876543413",
+          "description": "Historical site tours and cultural experiences",
+          "verified": false
+        },
+        {
+          "name": "Textile Manufacturing Unit",
+          "category": "industry",
+          "number": "+91-9876543414",
+          "description": "Traditional textile production and sales",
+          "verified": true
+        },
+        {
+          "name": "Local Restaurant",
+          "category": "restaurant",
+          "number": "+91-9876543415",
+          "description": "Traditional South Indian cuisine",
+          "verified": false
+        },
+        {
+          "name": "Auto Stand",
+          "category": "auto",
+          "number": "+91-9876543416",
+          "description": "Local transportation services",
+          "verified": false
+        },
+        {
+          "name": "Pharmacy",
+          "category": "pharmacy",
+          "number": "+91-9876543417",
+          "description": "Medicine and health products",
+          "verified": false
+        },
+        {
+          "name": "Banking Services",
+          "category": "atm",
+          "number": "+91-9876543418",
+          "description": "ATM and banking facilities",
+          "verified": true
+        },
+        {
+          "name": "Electrician Services",
+          "category": "electrician",
+          "number": "+91-9876543419",
+          "description": "Electrical repairs and maintenance",
+          "verified": false
+        },
+        {
+          "name": "Grocery Store",
+          "category": "grocery",
+          "number": "+91-9876543420",
+          "description": "Daily essentials and household items",
+          "verified": false
+        },
+        {
+          "name": "Xerox Center",
+          "category": "xerox",
+          "number": "+91-9876543421",
+          "description": "Document services and printing",
+          "verified": false
+        },
+        {
+          "name": "Mobile Repair",
+          "category": "repair",
+          "number": "+91-9876543422",
+          "description": "Mobile phone repairs and accessories",
+          "verified": false
+        },
+        {
+          "name": "Tailor Shop",
+          "category": "tailor",
+          "number": "+91-9876543423",
+          "description": "Clothing alterations and traditional wear",
+          "verified": false
+        },
+        {
+          "name": "Internet Cafe",
+          "category": "internet",
+          "number": "+91-9876543424",
+          "description": "Internet access and online services",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "id": "renigunta",
+      "name": "Renigunta Zone",
+      "icon": "✈️",
+      "description": "Transportation hub with airport and railway connectivity",
+      "address": "Renigunta Junction, Near Tirupati Airport",
+      "population": "~20,000 residents",
+      "keyAreas": ["Airport", "Railway junction", "Bus terminal", "Industrial area"],
+      "coordinates": { "lat": 13.6519, "lng": 79.5126 },
+      "alerts": [
+        "Airport construction — expect approach road delays",
+        "Monsoon showers likely — carry rain gear",
+        "Taxi union strike alert: limited availability"
+      ],
+      "emergencyContacts": [
+        {
+          "name": "Renigunta Police Station",
+          "number": "+91-9876543501",
+          "type": "critical",
+          "icon": "🚓",
+          "description": "Local police station for Renigunta area."
+        },
+        {
+          "name": "Airport Security",
+          "number": "+91-9876543502",
+          "type": "critical",
+          "icon": "✈️",
+          "description": "Airport security and passenger assistance."
+        },
+        {
+          "name": "Railway Police",
+          "number": "+91-9876543503",
+          "type": "authority",
+          "icon": "🚂",
+          "description": "Railway station security and passenger help."
+        },
+        {
+          "name": "Emergency Medical Center",
+          "number": "+91-9876543504",
+          "type": "support",
+          "icon": "🏥",
+          "description": "Emergency medical services for travelers."
+        }
+      ],
+      "services": [
+        {
+          "name": "Airport Services",
+          "category": "transport",
+          "number": "+91-9876543510",
+          "description": "Airport information and passenger services",
+          "verified": true
+        },
+        {
+          "name": "Railway Booking Center",
+          "category": "transport",
+          "number": "+91-9876543511",
+          "description": "Train ticket booking and reservations",
+          "verified": true
+        },
+        {
+          "name": "Bus Terminal Services",
+          "category": "transport",
+          "number": "+91-9876543512",
+          "description": "Inter-city and local bus services",
+          "verified": true
+        },
+        {
+          "name": "Taxi Services",
+          "category": "transport",
+          "number": "+91-9876543513",
+          "description": "Airport and railway station taxi services",
+          "verified": true
+        },
+        {
+          "name": "Hotel Booking",
+          "category": "hotel",
+          "number": "+91-9876543514",
+          "description": "Accommodation near transportation hubs",
+          "verified": false
+        },
+        {
+          "name": "Luggage Services",
+          "category": "storage",
+          "number": "+91-9876543515",
+          "description": "Luggage storage and porter services",
+          "verified": false
+        },
+        {
+          "name": "Food Court",
+          "category": "restaurant",
+          "number": "+91-9876543516",
+          "description": "Quick meals for travelers",
+          "verified": false
+        },
+        {
+          "name": "ATM Services",
+          "category": "atm",
+          "number": "+91-9876543517",
+          "description": "Banking and cash withdrawal services",
+          "verified": true
+        },
+        {
+          "name": "Mobile Services",
+          "category": "repair",
+          "number": "+91-9876543518",
+          "description": "Mobile phone repairs and accessories",
+          "verified": false
+        },
+        {
+          "name": "Internet Kiosk",
+          "category": "internet",
+          "number": "+91-9876543519",
+          "description": "Internet access and online booking",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "id": "puttur",
+      "name": "Puttur Zone",
+      "icon": "🌿",
+      "description": "Agricultural and rural development area with farming communities",
+      "address": "Puttur Town, Agricultural Development Zone",
+      "population": "~18,000 residents",
+      "keyAreas": ["Farming communities", "Agricultural markets", "Rural schools", "Health centers"],
+      "coordinates": { "lat": 13.441, "lng": 79.553 },
+      "alerts": [
+        "Weekly farmers’ market on Saturday",
+        "Pest control advisory issued for fields",
+        "Road repairs near Cooperative Store"
+      ],
+      "emergencyContacts": [
+        {
+          "name": "Puttur Police Station",
+          "number": "+91-9876543601",
+          "type": "critical",
+          "icon": "🚓",
+          "description": "Local police station serving Puttur and surrounding villages."
+        },
+        {
+          "name": "Rural Health Center",
+          "number": "+91-9876543602",
+          "type": "support",
+          "icon": "🏥",
+          "description": "Primary healthcare center for rural communities."
+        },
+        {
+          "name": "Agricultural Extension Office",
+          "number": "+91-9876543603",
+          "type": "authority",
+          "icon": "🌾",
+          "description": "Agricultural support and farmer assistance services."
+        }
+      ],
+      "services": [
+        {
+          "name": "Primary Health Center",
+          "category": "clinic",
+          "number": "+91-9876543610",
+          "description": "Basic healthcare services for rural community",
+          "verified": true
+        },
+        {
+          "name": "Agricultural Market",
+          "category": "market",
+          "number": "+91-9876543611",
+          "description": "Farm produce and agricultural supplies",
+          "verified": true
+        },
+        {
+          "name": "Seed and Fertilizer Store",
+          "category": "agriculture",
+          "number": "+91-9876543612",
+          "description": "Agricultural inputs and farming supplies",
+          "verified": true
+        },
+        {
+          "name": "Veterinary Services",
+          "category": "veterinary",
+          "number": "+91-9876543613",
+          "description": "Animal health and veterinary care",
+          "verified": false
+        },
+        {
+          "name": "Rural Bank",
+          "category": "atm",
+          "number": "+91-9876543614",
+          "description": "Banking services and agricultural loans",
+          "verified": true
+        },
+        {
+          "name": "Government School",
+          "category": "education",
+          "number": "+91-9876543615",
+          "description": "Primary and secondary education",
+          "verified": false
+        },
+        {
+          "name": "Post Office",
+          "category": "postal",
+          "number": "+91-9876543616",
+          "description": "Postal services and government schemes",
+          "verified": true
+        },
+        {
+          "name": "Cooperative Store",
+          "category": "grocery",
+          "number": "+91-9876543617",
+          "description": "Essential goods and household items",
+          "verified": false
+        },
+        {
+          "name": "Mobile Repair Shop",
+          "category": "repair",
+          "number": "+91-9876543618",
+          "description": "Mobile phone repairs and accessories",
+          "verified": false
+        },
+        {
+          "name": "Auto Services",
+          "category": "auto",
+          "number": "+91-9876543619",
+          "description": "Local transportation and auto-rickshaw",
+          "verified": false
+        },
+        {
+          "name": "Electrician",
+          "category": "electrician",
+          "number": "+91-9876543620",
+          "description": "Electrical repairs and maintenance",
+          "verified": false
+        },
+        {
+          "name": "Internet Center",
+          "category": "internet",
+          "number": "+91-9876543621",
+          "description": "Internet access and digital services",
+          "verified": false
+        }
+      ]
+    }
+  ],
+  "nationalEmergencyNumbers": [
+    {
+      "name": "Police Emergency",
+      "number": "100",
+      "type": "critical",
+      "icon": "🚨",
+      "description": "National police emergency number - Available 24/7",
+      "availability": "24/7",
+      "language_support": ["English", "Hindi", "Telugu", "Tamil"]
+    },
+    {
+      "name": "Ambulance",
+      "number": "108",
+      "type": "critical",
+      "icon": "🚑",
+      "description": "Medical emergency ambulance service",
+      "availability": "24/7",
+      "language_support": ["English", "Hindi", "Telugu", "Tamil"]
+    },
+    {
+      "name": "Fire Service",
+      "number": "101",
+      "type": "critical",
+      "icon": "🔥",
+      "description": "Fire department emergency response",
+      "availability": "24/7",
+      "language_support": ["English", "Hindi", "Telugu", "Tamil"]
+    },
+    {
+      "name": "Women Helpline",
+      "number": "181",
+      "type": "support",
+      "icon": "👩",
+      "description": "24/7 women's safety helpline",
+      "availability": "24/7",
+      "language_support": ["English", "Hindi", "Telugu", "Tamil"]
+    },
+    {
+      "name": "Child Helpline",
+      "number": "1098",
+      "type": "support",
+      "icon": "👶",
+      "description": "Child protection and rescue services",
+      "availability": "24/7",
+      "language_support": ["English", "Hindi", "Telugu", "Tamil"]
+    },
+    {
+      "name": "Mental Health Crisis Line",
+      "number": "1800-599-0019",
+      "type": "support",
+      "icon": "🧠",
+      "description": "KIRAN - 24/7 mental health support",
+      "availability": "24/7",
+      "language_support": ["English", "Hindi", "Telugu", "Tamil"]
+    },
+    {
+      "name": "Suicide & Crisis Lifeline",
+      "number": "988",
+      "type": "critical",
+      "icon": "💔",
+      "description": "24/7 suicide prevention and crisis support",
+      "availability": "24/7",
+      "language_support": ["English", "Hindi", "Telugu", "Tamil"]
+    },
+    {
+      "name": "National Domestic Violence",
+      "number": "1800-799-7233",
+      "type": "support",
+      "icon": "🏠",
+      "description": "Domestic violence hotline and support services",
+      "availability": "24/7",
+      "language_support": ["English", "Hindi", "Telugu", "Tamil"]
+    },
+    {
+      "name": "Disaster Management",
+      "number": "108",
+      "type": "authority",
+      "icon": "🛡️",
+      "description": "National disaster response force",
+      "availability": "24/7",
+      "language_support": ["English", "Hindi", "Telugu", "Tamil"]
+    },
+    {
+      "name": "Tourist Police",
+      "number": "1363",
+      "type": "authority",
+      "icon": "📞",
+      "description": "Tourist safety and assistance",
+      "availability": "24/7",
+      "language_support": ["English", "Hindi", "Telugu", "Tamil"]
+    },
+    {
+      "name": "Railway Helpline",
+      "number": "139",
+      "type": "support",
+      "icon": "🚂",
+      "description": "Train emergencies and complaints",
+      "availability": "24/7",
+      "language_support": ["English", "Hindi", "Telugu", "Tamil"]
+    },
+    {
+      "name": "Cyber Crime Reporting",
+      "number": "1930",
+      "type": "critical",
+      "icon": "💻",
+      "description": "Online fraud and cyber attacks",
+      "availability": "24/7",
+      "language_support": ["English", "Hindi", "Telugu", "Tamil"]
+    },
+    {
+      "name": "Anti-Poison Control",
+      "number": "1800-180-5522",
+      "type": "critical",
+      "icon": "☠️",
+      "description": "Poisoning emergencies",
+      "availability": "24/7",
+      "language_support": ["English", "Hindi", "Telugu", "Tamil"]
+    },
+    {
+      "name": "Senior Citizen Helpline",
+      "number": "14567",
+      "type": "support",
+      "icon": "👴",
+      "description": "Elderly abuse and support",
+      "availability": "24/7",
+      "language_support": ["English", "Hindi", "Telugu", "Tamil"]
+    },
+    {
+      "name": "LGBTQ+ Support",
+      "number": "1800-270-1234",
+      "type": "support",
+      "icon": "🏳️‍🌈",
+      "description": "Crisis intervention and support",
+      "availability": "24/7",
+      "language_support": ["English", "Hindi", "Telugu", "Tamil"]
+    },
+    {
+      "name": "Substance Abuse Helpline",
+      "number": "1800-662-4357",
+      "type": "support",
+      "icon": "💊",
+      "description": "Drug and alcohol addiction support",
+      "availability": "24/7",
+      "language_support": ["English", "Hindi", "Telugu", "Tamil"]
+    },
+    {
+      "name": "Elder Abuse Hotline",
+      "number": "1800-252-8966",
+      "type": "support",
+      "icon": "👵",
+      "description": "Elder abuse reporting and support",
+      "availability": "24/7",
+      "language_support": ["English", "Hindi", "Telugu", "Tamil"]
+    },
+    {
+      "name": "Disaster Distress Helpline",
+      "number": "1800-985-5990",
+      "type": "support",
+      "icon": "🌪️",
+      "description": "Crisis counseling for disaster survivors",
+      "availability": "24/7",
+      "language_support": ["English", "Hindi", "Telugu", "Tamil"]
+    },
+    {
+      "name": "Human Trafficking Hotline",
+      "number": "1800-373-7888",
+      "type": "critical",
+      "icon": "🚫",
+      "description": "Human trafficking reporting and support",
+      "availability": "24/7",
+      "language_support": ["English", "Hindi", "Telugu", "Tamil"]
+    },
+    {
+      "name": "Missing Persons Helpline",
+      "number": "1800-262-9663",
+      "type": "critical",
+      "icon": "🔍",
+      "description": "Missing persons reporting and search",
+      "availability": "24/7",
+      "language_support": ["English", "Hindi", "Telugu", "Tamil"]
+    },
+    {
+      "name": "Food Safety Hotline",
+      "number": "1800-114-1234",
+      "type": "support",
+      "icon": "🍽️",
+      "description": "Food poisoning and safety complaints",
+      "availability": "24/7",
+      "language_support": ["English", "Hindi", "Telugu", "Tamil"]
+    },
+    {
+      "name": "Consumer Helpline",
+      "number": "1800-11-4000",
+      "type": "support",
+      "icon": "🛒",
+      "description": "Consumer rights and complaints",
+      "availability": "24/7",
+      "language_support": ["English", "Hindi", "Telugu", "Tamil"]
+    },
+    {
+      "name": "Insurance Helpline",
+      "number": "1800-425-4747",
+      "type": "support",
+      "icon": "🛡️",
+      "description": "Insurance claims and support",
+      "availability": "24/7",
+      "language_support": ["English", "Hindi", "Telugu", "Tamil"]
+    },
+    {
+      "name": "Legal Aid Services",
+      "number": "1800-345-6789",
+      "type": "support",
+      "icon": "⚖️",
+      "description": "Free legal assistance and advice",
+      "availability": "24/7",
+      "language_support": ["English", "Hindi", "Telugu", "Tamil"]
+    },
+    {
+      "name": "Highway Patrol",
+      "number": "1033",
+      "type": "authority",
+      "icon": "🛣️",
+      "description": "Roadside assistance and highway emergencies",
+      "availability": "24/7",
+      "language_support": ["English", "Hindi", "Telugu", "Tamil"]
+    },
+    {
+      "name": "Animal Rescue",
+      "number": "1800-123-4567",
+      "type": "support",
+      "icon": "🐕",
+      "description": "Wildlife control and animal rescue services",
+      "availability": "24/7",
+      "language_support": ["English", "Hindi", "Telugu", "Tamil"]
+    }
+  ],
+  "guidanceCategories": [
+    {
+      "title": "Hidden Emergency Numbers",
+      "icon": "⚠️",
+      "items": [
+        "Railway Helpline: 139 (for train emergencies and complaints)",
+        "Cyber Crime: 1930 (for online fraud and cyber attacks)",
+        "Anti-Poison: 1800-180-5522 (for poisoning emergencies)",
+        "Senior Citizen Helpline: 14567 (elderly abuse and support)",
+        "LGBTQ+ Support: 1800-270-1234 (crisis intervention)"
+      ]
+    },
+    {
+      "title": "Legal Rights You Didn't Know",
+      "icon": "🛡️",
+      "items": [
+        "You can refuse to show your phone to police without a warrant",
+        "Landlords cannot enter your rented space without 24-hour notice",
+        "You have the right to record police interactions in public spaces",
+        "Employers cannot force you to work beyond 8 hours without overtime pay",
+        "You can file a complaint against any government office online"
+      ]
+    },
+    {
+      "title": "Digital Security Secrets",
+      "icon": "🔒",
+      "items": [
+        "Use 2FA on all accounts - most people don't know this prevents 99% of hacks",
+        "Never use public WiFi for banking - use mobile data instead",
+        "Your phone's IMEI can be tracked even when location is off",
+        "Delete old accounts you don't use - they're data goldmines for hackers",
+        "Use a VPN when using public computers or WiFi networks"
+      ]
+    },
+    {
+      "title": "Health Hacks That Save Money",
+      "icon": "❤️",
+      "items": [
+        "Generic medicines work exactly like branded ones - save 70% on costs",
+        "Most government hospitals provide free treatment for emergencies",
+        "Ayurvedic treatments are often covered by insurance if prescribed by doctors",
+        "You can get free health checkups at government dispensaries",
+        "Mental health consultations are free at government hospitals"
+      ]
+    },
+    {
+      "title": "Financial Safety Tips",
+      "icon": "💰",
+      "items": [
+        "Never share your PIN with anyone - banks will never ask for it",
+        "Keep emergency cash hidden at home - digital payments can fail",
+        "Always check your bank statements monthly for unauthorized transactions",
+        "Use different passwords for different accounts - one breach shouldn't affect all",
+        "Keep photocopies of important documents in a safe place"
+      ]
+    }
+  ]
+}
+
