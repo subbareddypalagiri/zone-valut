@@ -7,11 +7,16 @@ COPY . .
 # Install extensions
 RUN docker-php-ext-install pdo pdo_mysql
 
-# Disable conflicting MPMs - keep only mpm_prefork
-RUN a2dismod mpm_event mpm_worker || true
+# CRITICAL: Remove conflicting MPM module files
+RUN rm -f /etc/apache2/mods-enabled/mpm_event.* && \
+    rm -f /etc/apache2/mods-enabled/mpm_worker.* && \
+    rm -f /etc/apache2/mods-enabled/mpm_itk.*
 
-# Enable modules  
-RUN a2enmod rewrite headers mpm_prefork
+# Ensure mpm_prefork is enabled
+RUN a2enmod mpm_prefork
+
+# Enable other modules  
+RUN a2enmod rewrite headers
 
 # Create Apache config for PORT
 RUN echo "Listen 0.0.0.0:8080" > /etc/apache2/ports.conf
@@ -51,5 +56,8 @@ RUN echo '#!/bin/bash\nset -e\necho "Starting Apache on port ${PORT:-8080}"\nsed
 RUN echo "display_errors = Off" >> /usr/local/etc/php/conf.d/docker.ini && \
     echo "log_errors = On" >> /usr/local/etc/php/conf.d/docker.ini && \
     echo "error_log = /proc/self/fd/2" >> /usr/local/etc/php/conf.d/docker.ini
+
+# Verify final MPM state
+RUN echo "Enabled modules:" && ls /etc/apache2/mods-enabled/mpm_* 2>/dev/null || echo "Only mpm_prefork should remain"
 
 CMD ["/usr/local/bin/start.sh"]
