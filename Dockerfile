@@ -1,58 +1,69 @@
-FROM php:8.2-apache
+FROM php:8.2-fpm-alpine AS php
 
-# Cleanly disable conflicting MPMs and enable the correct one for PHP
-RUN a2dismod mpm_event mpm_worker || true \
-    && a2enmod mpm_prefork \
-    && a2enmod rewrite headers
+# Install PHP extensions
+RUN docker-php-ext-install pdo pdo_mysql
 
-# Prevent annoying "ServerName" warnings in logs
-RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+WORKDIR /var/www/html
+COPY . .
+
+RUN chown -R www-data:www-data /var/www/html
+
+---
+
+FROM nginx:alpine
 
 WORKDIR /var/www/html
 
-# Install extensions for your database
-RUN docker-php-ext-install pdo pdo_mysql
+# Copy PHP config from php-fpm image
+COPY --from=php /var/www/html /var/www/html
+COPY --from=php /usr/local/etc/php /usr/local/etc/php
+COPY --from=php /usr/local/etc/php-fpm.d /usr/local/etc/php-fpm.d
 
-# Copy all project files into the container
-COPY . .
+# Create nginx config for SPA + API routing
+RUN cat > /etc/nginx/conf.d/default.conf <<'EOF'
+upstream php {
+    server localhost:9000;
+}
 
-# Create Apache config for the dynamic PORT
-RUN echo "Listen 0.0.0.0:8080" > /etc/apache2/ports.conf
-
-# Configure default VirtualHost with CORRECT rewrite rules (!-f, !-d)
-RUN cat > /etc/apache2/sites-available/000-default.conf <<'EOF'
-<VirtualHost *:8080>
-    ServerAdmin webmaster@localhost
-    DocumentRoot /var/www/html
+server {
+    listen 0.0.0.0:8080 default_server;
+    server_name _;
     
-    <Directory /var/www/html>
-        AllowOverride All
-        Require all granted
-        
-        RewriteEngine On
-        # Route to index.html ONLY if the file/dir doesn't exist (SPA routing)
-        RewriteCond %{REQUEST_FILENAME} !-f
-        RewriteCond %{REQUEST_FILENAME} !-d
-        RewriteCond %{REQUEST_URI} !^/api/
-        RewriteRule ^ index.html [L]
-    </Directory>
+    root /var/www/html;
+    index index.html index.php;
     
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
-</VirtualHost>
+    # API routes
+    location /api/ {
+        try_files $uri $uri/ =404;
+        fastcgi_pass php;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+    
+    # Static files
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+    
+    # SPA routing - everything else goes to index.html
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+    
+    # PHP files in root (for any direct PHP access)
+    location ~ \.php$ {
+        fastcgi_pass php;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+}
 EOF
 
-# Set proper permissions so Apache can read the files
-RUN chown -R www-data:www-data /var/www/html && \
-    chmod -R 755 /var/www/html
-
-# Create startup script to handle Railway's dynamic PORT env var
-RUN echo '#!/bin/bash\nset -e\necho "Starting Apache on port ${PORT:-8080}"\nsed -i "s/Listen 0.0.0.0:8080/Listen 0.0.0.0:${PORT:-8080}/" /etc/apache2/ports.conf\nsed -i "s/<VirtualHost \*:8080>/<VirtualHost *:${PORT:-8080}>/" /etc/apache2/sites-available/000-default.conf\napache2-foreground' > /usr/local/bin/start.sh && \
+# Start both nginx and php-fpm
+RUN echo '#!/bin/sh\nphp-fpm -D\nnginx -g "daemon off;"' > /usr/local/bin/start.sh && \
     chmod +x /usr/local/bin/start.sh
-
-# PHP Config (Logs errors instead of showing them to users)
-RUN echo "display_errors = Off" >> /usr/local/etc/php/conf.d/docker.ini && \
-    echo "log_errors = On" >> /usr/local/etc/php/conf.d/docker.ini && \
-    echo "error_log = /proc/self/fd/2" >> /usr/local/etc/php/conf.d/docker.ini
 
 CMD ["/usr/local/bin/start.sh"]
