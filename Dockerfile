@@ -1,27 +1,25 @@
 FROM php:8.2-apache
 
+# Cleanly disable conflicting MPMs and enable the correct one for PHP
+RUN a2dismod mpm_event mpm_worker || true \
+    && a2enmod mpm_prefork \
+    && a2enmod rewrite headers
+
+# Prevent annoying "ServerName" warnings in logs
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
 WORKDIR /var/www/html
 
-COPY . .
-
-# Install extensions
+# Install extensions for your database
 RUN docker-php-ext-install pdo pdo_mysql
 
-# CRITICAL: Remove conflicting MPM module files
-RUN rm -f /etc/apache2/mods-enabled/mpm_event.* && \
-    rm -f /etc/apache2/mods-enabled/mpm_worker.* && \
-    rm -f /etc/apache2/mods-enabled/mpm_itk.*
+# Copy all project files into the container
+COPY . .
 
-# Ensure mpm_prefork is enabled
-RUN a2enmod mpm_prefork
-
-# Enable other modules  
-RUN a2enmod rewrite headers
-
-# Create Apache config for PORT
+# Create Apache config for the dynamic PORT
 RUN echo "Listen 0.0.0.0:8080" > /etc/apache2/ports.conf
 
-# Configure default VirtualHost
+# Configure default VirtualHost with CORRECT rewrite rules (!-f, !-d)
 RUN cat > /etc/apache2/sites-available/000-default.conf <<'EOF'
 <VirtualHost *:8080>
     ServerAdmin webmaster@localhost
@@ -32,10 +30,10 @@ RUN cat > /etc/apache2/sites-available/000-default.conf <<'EOF'
         Require all granted
         
         RewriteEngine On
-        RewriteCond %{REQUEST_FILENAME} -f
-        RewriteCond %{REQUEST_FILENAME} -d
-        RewriteRule ^ - [L]
-        RewriteRule ^api/ - [L]
+        # Route to index.html ONLY if the file/dir doesn't exist (SPA routing)
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteCond %{REQUEST_URI} !^/api/
         RewriteRule ^ index.html [L]
     </Directory>
     
@@ -44,20 +42,17 @@ RUN cat > /etc/apache2/sites-available/000-default.conf <<'EOF'
 </VirtualHost>
 EOF
 
-# Set permissions
+# Set proper permissions so Apache can read the files
 RUN chown -R www-data:www-data /var/www/html && \
     chmod -R 755 /var/www/html
 
-# Create startup script to handle PORT env var
+# Create startup script to handle Railway's dynamic PORT env var
 RUN echo '#!/bin/bash\nset -e\necho "Starting Apache on port ${PORT:-8080}"\nsed -i "s/Listen 0.0.0.0:8080/Listen 0.0.0.0:${PORT:-8080}/" /etc/apache2/ports.conf\nsed -i "s/<VirtualHost \*:8080>/<VirtualHost *:${PORT:-8080}>/" /etc/apache2/sites-available/000-default.conf\napache2-foreground' > /usr/local/bin/start.sh && \
     chmod +x /usr/local/bin/start.sh
 
-# PHP Config
+# PHP Config (Logs errors instead of showing them to users)
 RUN echo "display_errors = Off" >> /usr/local/etc/php/conf.d/docker.ini && \
     echo "log_errors = On" >> /usr/local/etc/php/conf.d/docker.ini && \
     echo "error_log = /proc/self/fd/2" >> /usr/local/etc/php/conf.d/docker.ini
-
-# Verify final MPM state
-RUN echo "Enabled modules:" && ls /etc/apache2/mods-enabled/mpm_* 2>/dev/null || echo "Only mpm_prefork should remain"
 
 CMD ["/usr/local/bin/start.sh"]
